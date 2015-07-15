@@ -20,6 +20,6 @@ public class PageContextualizerTest {
         Assert.assertEquals(PageCategory.AUTO, contextualizer.contextualize("https://en.wikipedia.org/wiki/Volkswagen_Golf"));
         Assert.assertEquals(PageCategory.FOOD, contextualizer.contextualize("https://en.wikipedia.org/wiki/Borscht"));
         Assert.assertEquals(PageCategory.FOOD, contextualizer.contextualize("https://en.wikipedia.org/wiki/Peking_duck"));
-        Assert.assertEquals(PageCategory.AUTO, contextualizer.contextualize("https://en.wikipedia.org/wiki/https://ru.wikipedia.org/wiki/Ferrari"));
+        Assert.assertEquals(PageCategory.AUTO, contextualizer.contextualize("https://ru.wikipedia.org/wiki/Ferrari"));
     }
 }
