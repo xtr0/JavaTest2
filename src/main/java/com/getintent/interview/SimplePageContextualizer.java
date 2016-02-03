@@ -34,11 +34,10 @@ public class SimplePageContextualizer implements PageContextualizer {
 
         try {
             final Map<PageCategory, Integer> frequencies = new HashMap<>(CATEGORY_PATTERNS.size());
-
             pageLoader.consumePage(url,
                     content -> CATEGORY_PATTERNS.stream().forEach(
-                            entry -> frequencies.compute(entry.category, (k, v) -> {
-                                final Matcher m = entry.pattern.matcher(content);
+                            categoryPattern -> frequencies.compute(categoryPattern.category, (k, v) -> {
+                                final Matcher m = categoryPattern.pattern.matcher(content);
 
                                 int count = 0;
                                 while (m.find()) {
@@ -50,11 +49,12 @@ public class SimplePageContextualizer implements PageContextualizer {
                     )
             );
 
-            final Map.Entry<PageCategory, Integer> f =
+            final Map.Entry<PageCategory, Integer> mostFrequent =
                     frequencies.entrySet().stream().max(Map.Entry.comparingByValue()).get();
-
             LOG.debug("FQS {}", frequencies);
-            final PageCategory category = f.getValue() > 0 ? f.getKey() : PageCategory.UNKNOWN;
+
+            final PageCategory category =
+                    mostFrequent.getValue() > 0 ? mostFrequent.getKey() : PageCategory.UNKNOWN;
             LOG.debug("{} : {}", category, url);
 
             return category;
