@@ -35,7 +35,7 @@ public class SimplePageContextualizer implements PageContextualizer {
         try {
             final Map<PageCategory, Integer> frequencies = new HashMap<>(CATEGORY_PATTERNS.size());
 
-            pageLoader.loadPage(url,
+            pageLoader.consumePage(url,
                     content -> CATEGORY_PATTERNS.stream().forEach(
                             entry -> frequencies.compute(entry.category, (k, v) -> {
                                 final Matcher m = entry.pattern.matcher(content);
