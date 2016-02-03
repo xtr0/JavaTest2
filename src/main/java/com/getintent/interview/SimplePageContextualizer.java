@@ -9,9 +9,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SimplePageContextualizer implements PageContextualizer {
     private static final Logger LOG = LoggerFactory.getLogger(SimplePageContextualizer.class);
@@ -53,8 +54,7 @@ public class SimplePageContextualizer implements PageContextualizer {
                     frequencies.entrySet().stream().max(Map.Entry.comparingByValue()).get();
             LOG.debug("FQS {}", frequencies);
 
-            final PageCategory category =
-                    mostFrequent.getValue() > 0 ? mostFrequent.getKey() : PageCategory.UNKNOWN;
+            final PageCategory category = mostFrequent.getValue() > 0 ? mostFrequent.getKey() : PageCategory.UNKNOWN;
             LOG.debug("{} : {}", category, url);
 
             return category;
@@ -72,13 +72,8 @@ public class SimplePageContextualizer implements PageContextualizer {
         CategoryPattern(final PageCategory category, final String... conditions) {
             this.category = category;
 
-            final StringJoiner joiner = new StringJoiner("|");
-            for (final String cond : conditions) {
-                joiner.add(cond);
-            }
-
-            this.pattern =
-                    Pattern.compile("\\b(?:" + joiner + ")\\b", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+            final String patternString = Stream.of(conditions).collect(Collectors.joining("|", "\\b(?:", ")\\b"));
+            this.pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
         }
     }
 }
