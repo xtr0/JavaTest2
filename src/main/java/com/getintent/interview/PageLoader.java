@@ -27,11 +27,7 @@ public class PageLoader {
             final HttpEntity entity = response.getEntity();
 
             try (final BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()))) {
-
-                String line;
-                while ((line = br.readLine()) != null) {
-                    consumer.accept(line);
-                }
+                br.lines().forEach(consumer);
             }
         }
     }
